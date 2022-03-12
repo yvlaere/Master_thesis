@@ -22,6 +22,7 @@ class TCN_model(pl.LightningModule):
       nn.Sigmoid())
 
     def forward(self, x):
+        
         embedding = self.encoder(x)
         output = self.decoder(embedding)
         output = output.view(output.size(0), -1)
@@ -34,6 +35,7 @@ class TCN_model(pl.LightningModule):
 
     def training_step(self, train_batch, batch_idx):
         x, y = train_batch
+        #print(x.shape)
         z = self.encoder(x)
         y_hat = self.decoder(z)
         y_hat = y_hat.view(y_hat.size(0), -1)
