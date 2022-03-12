@@ -16,13 +16,12 @@ from collections import defaultdict
 from sys import getsizeof
 
 class WGBSDataset():
-    """NS dataset"""
+    """WGBS dataset"""
 
     def __init__(self, fast5_dir, transform = None):
         """
         Args:
             fast5_dir (string): Path to the fast5 files
-            CpG (bool): True if only CpG sites should be considered, False if all Cs should be considered
         """
         
         self.alignment_path = 'Analyses/RawGenomeCorrected_000/BaseCalled_template/Alignment'
