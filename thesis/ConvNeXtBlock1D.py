@@ -3,35 +3,17 @@ from torch import nn
 
 # adapted from https://github.com/facebookresearch/ConvNeXt/blob/main/models/convnext.py
 class ConvNeXtBlock1D(nn.Module):
-    def __init__(
-        self,
-        dim,
-        kernel_size = 7,
-        layer_or_batchnorm = "layer",
-        depthwise = True,
-        dropout = 0.0,
-    ):
+    def __init__(self, dim, kernel_size = 7, layer_or_batchnorm = "layer", depthwise = True, dropout = 0.0):
         super().__init__()
 
-        self.conv = nn.Conv1d(
-            dim,
-            dim,
-            kernel_size = kernel_size,
-            padding = kernel_size // 2,
-            groups = (dim if depthwise else 1),
-        )
+        self.conv = nn.Conv1d(dim, dim,kernel_size = kernel_size, padding = kernel_size // 2, groups = (dim if depthwise else 1))
 
         if layer_or_batchnorm == "layer":
             self.norm = LayerNorm(dim, data_format="channels_first")
         else:
             self.norm = nn.BatchNorm1d(dim)
 
-        self.pointwise_net = nn.Sequential(
-            nn.Linear(dim, 4 * dim),
-            nn.GELU(),
-            nn.Dropout(dropout),
-            nn.Linear(4 * dim, dim),
-        )
+        self.pointwise_net = nn.Sequential(nn.Linear(dim, 4 * dim), nn.GELU(), nn.Dropout(dropout), nn.Linear(4 * dim, dim))
 
     def forward(self, x):
         z = self.norm(self.conv(x))
